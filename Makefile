@@ -2,7 +2,7 @@ CC = gcc
 
 CFLAGS = -Wall -g
 
-SRCS = src/main.c
+SRCS = src/main.c src/utils.c
 
 OBJS = $(SRCS:.c=.o)
 
