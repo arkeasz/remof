@@ -9,17 +9,22 @@
 
 int main(int argc, char *argv[])  {
     int i;
-    const char *file[MAX_VALUES] = {NULL};
+    const char *values[MAX_VALUES] = {NULL};
     char *options[MAX_OPTIONS] = {NULL};
     int option_count = 0;
-    int val_count = 0;
+    int value_count = 0;
 
-    for (i = 0; i < argc; i++)  {
+    for (i = 1; i < argc; i++)  {
         if (startsWith("--", argv[i]) || startsWith("-", argv[i]))   {
             if (option_count < MAX_OPTIONS) {
                 options[option_count++] = argv[i];
             }
+        } else {
+            if (value_count < MAX_VALUES)   {
+                values[value_count++] = argv[i];
+            }
         }
+
     }
 
     for (i = 0; i < option_count; i++) {
@@ -28,10 +33,13 @@ int main(int argc, char *argv[])  {
         }
     }
 
-    
-    // if (remove(file) == 0) {
-    //     printf("File deleted successfully.\n");
-    // } else {
-    //     printf("Error: Unable to delete the file.\n");
-    // }
+    for (i = 0; i < value_count; i++)   {
+        if (values[i] != NULL)  {
+            if (remove(values[i]) == 0) {
+                printf("File deleted successfully. (%s)\n", values[i]);
+            } else {
+                printf("Error: Unable to delete the file.\n");
+            }
+        }
+    }
 }
