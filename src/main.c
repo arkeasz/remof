@@ -42,7 +42,7 @@ int main(int argc, char *argv[])  {
         if (values[i] != NULL)  {
             FileData info = fileInfo(values[i]);
             if (info.kind == 'd')   {
-                return 0;
+                removeDir(values[i]);
             }
 
             if (info.kind == 'a')   {

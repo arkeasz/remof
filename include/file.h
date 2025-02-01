@@ -6,5 +6,6 @@ typedef struct {
 } FileData;
 
 FileData fileInfo(const char *filename);
+void removeDir(const char *path);
 
 #endif
