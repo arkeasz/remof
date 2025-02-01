@@ -1,8 +1,8 @@
 CC = gcc
 
-CFLAGS = -Wall -g
+CFLAGS = -Wall -g -Iinclude
 
-SRCS = src/main.c src/utils.c
+SRCS = src/main.c src/utils.c src/file.c
 
 OBJS = $(SRCS:.c=.o)
 
