@@ -6,7 +6,7 @@ SRCS = src/main.c src/utils.c src/file.c
 
 OBJS = $(SRCS:.c=.o)
 
-TARGET = dist
+TARGET = remof
 
 all: $(TARGET)
 
