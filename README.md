@@ -18,8 +18,8 @@ This project is a custom implementation of the `rm` command in C, designed to pr
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/your-repo-name.git
-   cd your-repo-name
+   git clone https://github.com/arkeasz/remof.git
+   cd remof
    ```
 
 2. Compile the program:
