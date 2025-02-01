@@ -42,10 +42,10 @@ To delete files, provide the filenames as arguments:
 ### Example
 
 ```bash
-$ ./custom_rm test.txt
+$ ./remof test.txt
 File deleted successfully. (test.txt)
 
-$ ./custom_rm non_existent.txt
+$ ./remof non_existent.txt
 Error: Unable to delete the file.
 ```
 
