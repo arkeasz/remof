@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include "utils.h"
+#include <sys/stat.h>
 
 bool startsWith(const char *pre, const char *str)   {
     size_t lenpre = strlen(pre),

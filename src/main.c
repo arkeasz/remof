@@ -3,6 +3,11 @@
 #include <string.h>
 #include <stdbool.h>
 #include "utils.h"
+#include "file.h"
+#include <sys/stat.h>
+#include <time.h>
+#include <pwd.h>
+#include <grp.h>
 
 #define MAX_OPTIONS 6
 #define MAX_VALUES 4
@@ -35,10 +40,17 @@ int main(int argc, char *argv[])  {
 
     for (i = 0; i < value_count; i++)   {
         if (values[i] != NULL)  {
-            if (remove(values[i]) == 0) {
-                printf("File deleted successfully. (%s)\n", values[i]);
-            } else {
-                printf("Error: Unable to delete the file.\n");
+            FileData info = fileInfo(values[i]);
+            if (info.kind == 'd')   {
+                return 0;
+            }
+
+            if (info.kind == 'a')   {
+                if (remove(values[i]) == 0) {
+                    printf("File deleted successfully. (%s)\n", values[i]);
+                } else {
+                    printf("Error: Unable to delete the file.\n");
+                }
             }
         }
     }
