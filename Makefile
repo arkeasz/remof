@@ -1,6 +1,6 @@
 CC = gcc
 
-CFLAGS = -Wall -g -Iinclude
+CFLAGS = -Wall -g -Iinclude -pthread
 
 SRCS = src/main.c src/utils.c src/file.c
 
