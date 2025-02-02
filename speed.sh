@@ -10,4 +10,6 @@ npm init -y
 npm install typo
 cd ..
 
-hyperfine './dist/remof project' 'rm -rf project2'
+clear
+
+hyperfine -N --warmup=10 './remof proone' 'rm -rf protwo'
