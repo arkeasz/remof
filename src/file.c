@@ -4,13 +4,13 @@
 #include <sys/stat.h>
 #include <dirent.h>
 #include <unistd.h>
+#include <stdlib.h>
 
 FileData fileInfo(const char *filename) {
     struct stat file_stat;
     FileData fi;
 
     if (stat(filename, &file_stat) == -1) {
-        perror("Error to get metadata\n");
         fi.kind = 'e';
         return fi;
     }
@@ -24,11 +24,10 @@ FileData fileInfo(const char *filename) {
     return fi;
 }
 
-void removeDir(const char *path)  {
+void removeDir(const char *path, Output *otp)  {
     DIR *dir = opendir(path);
 
     if (dir == NULL) {
-        perror("opendir");
         return;
     }
 
@@ -41,26 +40,22 @@ void removeDir(const char *path)  {
         char fullPath[1024];
         snprintf(fullPath, sizeof(fullPath), "%s/%s", path, entry->d_name);
 
-        FileData info = fileInfo(fullPath);
-        if (info.kind == 'd')   {
-            removeDir(fullPath);
-        }
-
-        if (info.kind == 'a')   {
+        if (entry->d_type == DT_REG) {
             if (remove(fullPath) == 0) {
-                printf("File deleted successfully. (%s)\n", entry->d_name);
+                if (otp->verbose) printf("File deleted successfully. (%s)\n", entry->d_name);
             } else {
-                printf("Error: Unable to delete the file.\n");
+                if (otp->verbose) printf("Error: Unable to delete the file.\n");
             }
+        } else if (entry->d_type == DT_DIR) {
+            removeDir(fullPath, otp);
         }
-        printf("%s\n", entry->d_name);
     }
 
     closedir(dir);
 
     if (rmdir(path) == 0) {
-        printf("Directory deleted successfully. (%s)\n", path);
+        if (otp->verbose) printf("Directory deleted successfully. (%s)\n", path);
     } else {
-        perror("rmdir");
+        if (otp->verbose) perror("rmdir");
     }
 }
