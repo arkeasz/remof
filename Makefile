@@ -2,7 +2,7 @@ CC = gcc
 
 CFLAGS = -Wall -g -Iinclude -pthread
 
-SRCS = src/main.c src/utils.c src/file.c
+SRCS = $(wildcard src/*.c)
 
 OBJS = $(SRCS:.c=.o)
 
