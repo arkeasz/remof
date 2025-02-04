@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "file.h"
+#include "parse.h"
 #include <sys/stat.h>
 #include <dirent.h>
 #include <unistd.h>

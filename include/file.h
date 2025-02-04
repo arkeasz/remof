@@ -2,6 +2,7 @@
 
 #define FILE_H
 #include "utils.h"
+#include "parse.h"
 
 typedef struct {
     char kind; /* d: directory | a: archive | e: error*/

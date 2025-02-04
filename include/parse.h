@@ -1,15 +1,29 @@
 #ifndef PARSE_H
 
 #define PARSE_H
-
-#define SIZE 6
+#include <stdbool.h>
+#include "utils.h"
 
 typedef struct {
-    char** first[SIZE];
-    char** second[SIZE];
+    int s;
+    bool verbose;
+    SuccessFile success_files[10];
+} Output;
+
+Output initOut();
+
+typedef struct {
+    Output otp;
+    Tuple vals;
+} CLI;
+
+typedef struct {
+    char** first;
+    char** second;
 } Tuple;
 
-Tuple initTuple(char** a[], char** b[]);
+void initCLI(int arglen, char *args[])
+Tuple initTuple(const char** a, const char** b);
 void printTuple(Tuple t);
 
 #endif

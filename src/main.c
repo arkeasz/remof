@@ -1,9 +1,11 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
 #include <stdbool.h>
 #include "utils.h"
 #include "file.h"
+#include "parse.h"
 #include <sys/stat.h>
 #include <time.h>
 #include <pwd.h>
@@ -11,13 +13,6 @@
 
 #define MAX_OPTIONS 6
 #define MAX_VALUES 10
-#define ANSI_COLOR_RED     "\x1b[31m"
-#define ANSI_COLOR_GREEN   "\x1b[32m"
-#define ANSI_COLOR_YELLOW  "\x1b[33m"
-#define ANSI_COLOR_BLUE    "\x1b[34m"
-#define ANSI_COLOR_MAGENTA "\x1b[35m"
-#define ANSI_COLOR_CYAN    "\x1b[36m"
-#define ANSI_COLOR_RESET   "\x1b[0m"
 
 int main(int argc, char *argv[])  {
     int i;
@@ -25,7 +20,7 @@ int main(int argc, char *argv[])  {
     char *options[MAX_OPTIONS] = {NULL};
     int option_count = 0;
     int value_count = 0;
-
+    Tuple tpl;
     for (i = 1; i < argc; i++)  {
         if (startsWith("--", argv[i]) || startsWith("-", argv[i]))   {
             if (option_count < MAX_OPTIONS) {
@@ -38,7 +33,8 @@ int main(int argc, char *argv[])  {
         }
 
     }
-
+    tpl = initTuple(values, options);
+    printTuple(tpl);
     Output otp = initOut();
 
     for (i = 0; i < option_count; i++) {
@@ -67,13 +63,13 @@ int main(int argc, char *argv[])  {
 
             if (info.kind == 'a')   {
                 if (remove(values[i]) == 0) {
-                    if (otp.verbose) printf("File deleted successfully. (%s)\n", values[i]);
+                    if (otp.verbose) printf("File deleted successfully." ANSI_COLOR_GREEN CHECK_ICON "(%s)\n", values[i]);
                     sf.filename = values[i];
                     sf.status = true;
                     otp.success_files[otp.s] = sf;
                     otp.s += 1;
                 } else {
-                    if (otp.verbose) printf("Error: Unable to delete the file. (%s)\n", values[i]);
+                    if (otp.verbose) printf("Error: Unable to delete the file." ANSI_COLOR_RED ALARM_ICON "(%s)\n", values[i]);
                 }
             }
         }
@@ -83,9 +79,10 @@ int main(int argc, char *argv[])  {
         printf("File deleted successfully.\n");
         for (i = 0; i < otp.s; i++) {
             if (otp.success_files[i].status) {
-                printf(ANSI_COLOR_GREEN "\xE2\x9C\x85" ANSI_COLOR_RESET " %s\n", otp.success_files[i].filename);
+                printf(ANSI_COLOR_GREEN CHECK_ICON ANSI_COLOR_RESET "%s\n", otp.success_files[i].filename);
             }
         }
     }
-
+    free(tpl.first);
+    free(tpl.second);
 }
