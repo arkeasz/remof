@@ -6,6 +6,7 @@
 #include "utils.h"
 #include "file.h"
 #include "parse.h"
+#include "cli.h"
 #include <sys/stat.h>
 #include <time.h>
 #include <pwd.h>
@@ -34,7 +35,7 @@ int main(int argc, char *argv[])  {
 
     }
     tpl = initTuple(values, options);
-    printTuple(tpl);
+    // printTuple(tpl);
     Output otp = initOut();
 
     for (i = 0; i < option_count; i++) {

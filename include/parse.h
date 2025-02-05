@@ -5,6 +5,11 @@
 #include "utils.h"
 
 typedef struct {
+    char** first;
+    char** second;
+} Tuple;
+
+typedef struct {
     int s;
     bool verbose;
     SuccessFile success_files[10];
@@ -12,17 +17,6 @@ typedef struct {
 
 Output initOut();
 
-typedef struct {
-    Output otp;
-    Tuple vals;
-} CLI;
-
-typedef struct {
-    char** first;
-    char** second;
-} Tuple;
-
-void initCLI(int arglen, char *args[])
 Tuple initTuple(const char** a, const char** b);
 void printTuple(Tuple t);
 
