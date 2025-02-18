@@ -6,7 +6,7 @@ SRCS = $(wildcard src/*.c)
 
 OBJS = $(SRCS:.c=.o)
 
-TARGET = remof
+TARGET = rf
 
 all: $(TARGET)
 
