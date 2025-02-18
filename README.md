@@ -29,23 +29,23 @@ This project is a custom implementation of the `rm` command in C, designed to pr
 
 3. Run the program:
    ```bash
-   ./remof file1.txt file2.txt
+   ./rf file1.txt file2.txt
    ```
 
 ### Usage
 
 To delete files, provide the filenames as arguments:
 ```bash
-./remof file1.txt file2.txt
+./rf file1.txt file2.txt
 ```
 
 ### Example
 
 ```bash
-$ ./remof test.txt
+$ ./rf test.txt
 File deleted successfully. (test.txt)
 
-$ ./remof non_existent.txt
+$ ./rf non_existent.txt
 Error: Unable to delete the file.
 ```
 
