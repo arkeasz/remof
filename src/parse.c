@@ -37,13 +37,13 @@ void printTuple(Tuple t) {
     printf("Tuple:\n\tFirst:  { ");
     for (int i = 0; i < SIZE; i++) {
         if (t.first[i] != NULL) {
-            printf("%s ", t.first[i]);
+            printf("%s, ", t.first[i]);
         }
     }
     printf("}\n\tSecond: { ");
     for (int i = 0; i < SIZE; i++) {
         if (t.second[i] != NULL) {
-            printf("%s ", t.second[i]);
+            printf("%s, ", t.second[i]);
         }
     }
     printf("}\n");

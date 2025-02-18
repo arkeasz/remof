@@ -6,6 +6,7 @@
 #include <dirent.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <limits.h>
 
 FileData fileInfo(const char *filename) {
     struct stat file_stat;
@@ -34,20 +35,30 @@ void removeDir(const char *path, Output *otp)  {
 
     struct dirent *entry;
     while ((entry = readdir(dir)) != NULL)  {
-        if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) {
+        if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) continue;
+
+        char fullPath[PATH_MAX];
+        snprintf(fullPath, sizeof(fullPath), "%s/%s", path, entry->d_name);
+
+        struct stat statbuf;
+        if (lstat(fullPath, &statbuf) == -1) {
+            if (otp->verbose) {
+                perror("lstat");
+                printf("Error stating %s\n", fullPath);
+            }
             continue;
         }
 
-        char fullPath[1024];
-        snprintf(fullPath, sizeof(fullPath), "%s/%s", path, entry->d_name);
-
-        if (entry->d_type == DT_REG) {
-            if (remove(fullPath) == 0) {
-                if (otp->verbose) printf("File deleted successfully. (%s)\n", entry->d_name);
+        if (S_ISREG(statbuf.st_mode) || S_ISLNK(statbuf.st_mode)) {
+            if (unlink(fullPath) == 0) {
+                if (otp->verbose) printf("Deleted: %s\n", fullPath);
             } else {
-                if (otp->verbose) printf("Error: Unable to delete the file.\n");
+                if (otp->verbose) {
+                    perror("unlink");
+                    printf("Failed to delete: %s\n", fullPath);
+                }
             }
-        } else if (entry->d_type == DT_DIR) {
+        } else if (S_ISDIR(statbuf.st_mode)) {
             removeDir(fullPath, otp);
         }
     }

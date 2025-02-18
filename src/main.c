@@ -12,65 +12,47 @@
 #include <pwd.h>
 #include <grp.h>
 
-#define MAX_OPTIONS 6
-#define MAX_VALUES 10
-
 int main(int argc, char *argv[])  {
     int i;
-    const char *values[MAX_VALUES] = {NULL};
-    char *options[MAX_OPTIONS] = {NULL};
-    int option_count = 0;
-    int value_count = 0;
-    Tuple tpl;
-    for (i = 1; i < argc; i++)  {
-        if (startsWith("--", argv[i]) || startsWith("-", argv[i]))   {
-            if (option_count < MAX_OPTIONS) {
-                options[option_count++] = argv[i];
-            }
-        } else {
-            if (value_count < MAX_VALUES)   {
-                values[value_count++] = argv[i];
-            }
-        }
+    CLI* cli = cli_init();
+    cli_parse(cli, argc, argv);
 
-    }
-    tpl = initTuple(values, options);
-    // printTuple(tpl);
     Output otp = initOut();
 
-    for (i = 0; i < option_count; i++) {
-        if (options[i] != NULL) {
-            if (strcmp(options[i], "--help") == 0 || strcmp(options[i], "-?") == 0) {
+    for (i = 0; i < cli->flag_count; i++) {
+        if (cli->flags[i] != NULL) {
+            if (strcmp(cli->flags[i], "--help") == 0 || strcmp(cli->flags[i], "-?") == 0) {
                 printHelp();
                 return 0;
             }
-            if (strcmp(options[i], "--verbose") == 0 || strcmp(options[i], "-v") == 0) {
+            if (strcmp(cli->flags[i], "--verbose") == 0 || strcmp(cli->flags[i], "-v") == 0) {
                 otp.verbose = true;
             }
         }
     }
 
-    for (i = 0; i < value_count; i++)   {
-        if (values[i] != NULL)  {
-            FileData info = fileInfo(values[i]);
+    for (i = 1; i < cli->values_count; i++)   {
+        if (cli->values[i] != NULL)  {
+            FileData info = fileInfo(cli->values[i]);
             SuccessFile sf;
+            
             if (info.kind == 'd')   {
-                removeDir(values[i], &otp);
-                sf.filename = values[i];
+                removeDir(cli->values[i], &otp);
+                sf.filename = cli->values[i];
                 sf.status = true;
                 otp.success_files[otp.s] = sf;
                 otp.s += 1;
             }
 
             if (info.kind == 'a')   {
-                if (remove(values[i]) == 0) {
-                    if (otp.verbose) printf("File deleted successfully." ANSI_COLOR_GREEN CHECK_ICON "(%s)\n", values[i]);
-                    sf.filename = values[i];
+                if (remove(cli->values[i]) == 0) {
+                    if (otp.verbose) printf("File deleted successfully." ANSI_COLOR_GREEN CHECK_ICON "(%s)\n", cli->values[i]);
+                    sf.filename = cli->values[i];
                     sf.status = true;
                     otp.success_files[otp.s] = sf;
                     otp.s += 1;
                 } else {
-                    if (otp.verbose) printf("Error: Unable to delete the file." ANSI_COLOR_RED ALARM_ICON "(%s)\n", values[i]);
+                    if (otp.verbose) printf("Error: Unable to delete the file." ANSI_COLOR_RED ALARM_ICON "(%s)\n", cli->values[i]);
                 }
             }
         }
@@ -84,6 +66,6 @@ int main(int argc, char *argv[])  {
             }
         }
     }
-    free(tpl.first);
-    free(tpl.second);
+
+    cli_free(cli);
 }
